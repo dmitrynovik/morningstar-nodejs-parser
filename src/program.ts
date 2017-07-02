@@ -1,2 +1,4 @@
+import MorningstarParser from './morningstarParser';
 
-console.log('Hi');
+const parser = new MorningstarParser();
+parser.scrap("XASX:STW");
