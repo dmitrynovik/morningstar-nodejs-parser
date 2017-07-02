@@ -8,13 +8,18 @@
     "build:live": "nodemon --exec ts-node src/program.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["node.js", "web", "scrapper"],
+  "keywords": [
+    "node.js",
+    "web",
+    "scrapper"
+  ],
   "author": "Dmitry Novik",
   "license": "MIT",
   "dependencies": {
     "cheerio": "^1.0.0-rc.1",
     "jquery": "^3.2.1",
     "jsdom": "^11.0.0",
+    "line-by-line": "^0.1.5",
     "tinyreq": "^3.2.2"
   },
   "devDependencies": {

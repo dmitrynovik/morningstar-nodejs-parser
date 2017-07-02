@@ -10,8 +10,20 @@ export default class MorningstarParser {
 
     scrap(ticker: string) {
 
-        const url = "http://portfolios.morningstar.com/fund/ajax/holdings_tab?&t=" + ticker;
+        const getMorningstarTicker = () => {
+            const parts = ticker.split(":");
+
+            switch(parts[0].toUpperCase()) {
+                case "ASX": return "XASX:" + parts[1];
+                case "LSE": return "XLSE:" + parts[1];
+                case "ARCA": return "ARCX:" + parts[1];
+                default: return ticker;
+            }
+        };
+
+        const url = "http://portfolios.morningstar.com/fund/ajax/holdings_tab?&t=" + getMorningstarTicker();
         console.log("processing", url);
+        const fund = new Fund(ticker);
 
         request(url, (err:any, body:string) => {
             if (err) {
@@ -19,6 +31,8 @@ export default class MorningstarParser {
                 return;
             }
 
+            try
+            {
             const html = JSON.parse(body).htmlStr;
             const dom = new JSDOM(html);
             const $ = require('jquery')(dom.window);
@@ -49,8 +63,6 @@ export default class MorningstarParser {
                 }
             }
 
-            const fund = new Fund(ticker);
-
             const items = $("#holding_epage0 tr");
             items.each((i:number, element:any) => {
                 const $element = $(element);
@@ -59,6 +71,7 @@ export default class MorningstarParser {
                 if (companyRef) {
                     const ixStart = companyRef.indexOf("?t=");
                     const ixEnd = companyRef.indexOf("&", ixStart + 1);
+
                     if (ixEnd >=0 && ixStart >= 0) {
                         const companyTicker = companyRef.substr(ixStart + 3, ixEnd - ixStart - 3);
                         try
@@ -85,8 +98,10 @@ export default class MorningstarParser {
                     }
                 }
             });
+            }
+            catch(error) {
+                console.error(error);
+            }
         });
-
-    }
-    
+    }    
 }
