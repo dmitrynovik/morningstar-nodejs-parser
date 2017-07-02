@@ -1,0 +1,28 @@
+{
+  "name": "nodejs-web-scrapper",
+  "version": "1.0.0",
+  "description": "as above",
+  "main": "src/program.js",
+  "scripts": {
+    "start": "npm run build:live",
+    "build:live": "nodemon --exec ts-node src/program.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node.js",
+    "web",
+    "scrapper"
+  ],
+  "author": "Dmitry Novik",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.1",
+    "tinyreq": "^3.2.2"
+  },
+  "devDependencies": {
+    "typescript": "^2.4.1",
+    "@types/node": "^8.0.7",
+    "nodemon": "^1.11.0",
+    "ts-node": "^3.1.0"
+  }
+}

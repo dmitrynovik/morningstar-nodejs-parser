@@ -1,0 +1,8 @@
+# Typescript compiled files:
+*.js
+
+# Misc logs:
+*.log
+
+# Modules
+node_modules/
