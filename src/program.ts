@@ -1,8 +1,8 @@
-import csvInputReader from './csvInputReader';
+const fs = require('fs');
+import ParallelScrapper from './parallelScrapper';
 
-//import MorningstarParser from './morningstarParser';
-//const parser = new MorningstarParser();
-//parser.scrap("XASX:STW");
+var output = fs.createWriteStream('out.log');
+process.stdout.write = process.stderr.write = output.write.bind(output);
 
-const inputReader = new csvInputReader('data/etf_list.csv');
-inputReader.start();
+const scrappy = new ParallelScrapper('data/etf_list.csv');
+scrappy.start();

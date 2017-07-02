@@ -16,10 +16,12 @@
   "author": "Dmitry Novik",
   "license": "MIT",
   "dependencies": {
+    "async": "^2.5.0",
     "cheerio": "^1.0.0-rc.1",
     "jquery": "^3.2.1",
     "jsdom": "^11.0.0",
     "line-by-line": "^0.1.5",
+    "parallel-batch": "^0.1.1",
     "tinyreq": "^3.2.2"
   },
   "devDependencies": {

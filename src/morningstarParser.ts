@@ -1,5 +1,4 @@
 const request = require('tinyreq');
-const fs = require('fs');
 const jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 
@@ -29,16 +28,23 @@ export default class MorningstarParser {
             if (err) {
                 console.error(err);
                 return;
+            }            
+            
+            let html: string;
+            try {
+                html = JSON.parse(body).htmlStr;
+            } catch (error) {
+                console.log(error);
+                return;
             }
-
-            try
-            {
-            const html = JSON.parse(body).htmlStr;
             const dom = new JSDOM(html);
             const $ = require('jquery')(dom.window);
 
             const getCellText = (cells:Array<any>, i:number) => $(cells[i]).html();
-            const getCellInt = (cells:Array<any>, i:number) => parseInt(getCellText(cells, i).replace(/,/g, ""));
+            const getCellInt = (cells:Array<any>, i:number) => { 
+                const text = getCellText(cells, i);
+                return text ? parseInt(text.replace(/,/g, "")) : 0;
+            }
 
             const getCellDate = (cells:Array<any>, i:number) => { 
                 const tokens = getCellText(cells, i).split("/");
@@ -46,7 +52,11 @@ export default class MorningstarParser {
             }
 
             const getSector = (cells:Array<any>) => { 
-                const code = $(cells[6]).find("span").attr("class").replace("sctr_", "").toLowerCase();
+                const attr = $(cells[6]).find("span").attr("class");
+                if (!attr)
+                    return {name: "", style: ""};
+
+                const code = attr.replace("sctr_", "").toLowerCase();
                 switch (code) {
                     case "bm": return {name: "Basic Materials", style: "Cyclical"};
                     case "cc": return {name: "Consumer Cyclical", style: "Cyclical"};
@@ -98,10 +108,6 @@ export default class MorningstarParser {
                     }
                 }
             });
-            }
-            catch(error) {
-                console.error(error);
-            }
         });
     }    
 }
