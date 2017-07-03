@@ -1,5 +1,6 @@
 export default class Holding {
     ticker: string;
+    name: string;
     weight: number;
     shares: number;
     sector: string;

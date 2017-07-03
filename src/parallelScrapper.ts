@@ -7,7 +7,7 @@ export default class ParallelScrapper {
 
     firstLine = true;
     complete = false;    
-    parallelism = 10; // how many jobs do we want to run in parallel:
+    parallelism = 10; // how many jobs do we want to run in parallel
     tickers:string[] = [];
 
     constructor(private path:string, private parseFunction: (ticker:string) => void) {

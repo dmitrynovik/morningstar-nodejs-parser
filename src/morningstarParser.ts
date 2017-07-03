@@ -4,8 +4,12 @@ const { JSDOM } = jsdom;
 
 import Holding from './holding';
 import Fund from './fund';
+import Persister from './persister';
 
 export default class MorningstarParser {
+
+    constructor(private persister: Persister) {        
+    }
 
     scrap(ticker: string) {
 
@@ -77,7 +81,8 @@ export default class MorningstarParser {
             items.each((i:number, element:any) => {
                 const $element = $(element);
 
-                const companyRef = $element.find("th a").attr("href");
+                const $header = $element.find("th a");
+                const companyRef = $header.attr("href");
                 if (companyRef) {
                     const ixStart = companyRef.indexOf("?t=");
                     const ixEnd = companyRef.indexOf("&", ixStart + 1);
@@ -90,6 +95,7 @@ export default class MorningstarParser {
 
                             const holding = new Holding();
                             holding.ticker = companyTicker;
+                            holding.name = $header.html();
                             holding.weight = parseFloat(getCellText($cells, 3));
                             holding.shares = getCellInt($cells, 4);
                             const sector = getSector($cells);
@@ -99,8 +105,8 @@ export default class MorningstarParser {
                             holding.country = getCellText($cells, 11);
                             holding.YTD = getCellText($cells, 12);
                             
-                            console.log(holding);
                             fund.holdings.push(holding);
+                            this.persister.persist(fund.ticker, holding);
                         }
                         catch (parseErr) {
                             console.error(parseErr);
