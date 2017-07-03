@@ -14,7 +14,7 @@ export default class MorningstarParser {
 
             switch(parts[0].toUpperCase()) {
                 case "ASX": return "XASX:" + parts[1];
-                case "LSE": return "XLSE:" + parts[1];
+                case "LSE": return parts[1];
                 case "ARCA": return "ARCX:" + parts[1];
                 default: return ticker;
             }
