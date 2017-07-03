@@ -10,7 +10,7 @@ export default class ParallelScrapper {
     parallelism = 10; // how many jobs do we want to run in parallel:
     tickers:string[] = [];
 
-    constructor(private path:string) {
+    constructor(private path:string, private parseFunction: (ticker:string) => void) {
     }
 
     start() {
@@ -42,8 +42,7 @@ export default class ParallelScrapper {
                 (tickers:Array<string>) => {
                     tickers.forEach( ticker => {
                         try {
-                            var parser = new MornigstarParser();
-                            parser.scrap(ticker);
+                            self.parseFunction(ticker);
                         } catch (err) {
                             console.error(err);
                         }
