@@ -5,10 +5,11 @@ import MornigstarParser from './morningstarParser';
 
 export default class ParallelScrapper {
 
-    firstLine = true;
-    complete = false;    
-    parallelism = 10; // how many jobs do we want to run in parallel
-    tickers:string[] = [];
+    private skipFirstLine = true;
+    private firstLine = true;
+    private complete = false;    
+    private parallelismDegree = 10; // how many jobs do we want to run in parallel
+    private tickers:string[] = [];
 
     constructor(private path:string, private parseFunction: (ticker:string) => void) {
     }
@@ -22,7 +23,8 @@ export default class ParallelScrapper {
         });
 
         lr.on('line', function (line:string) {
-            if (self.firstLine) {
+            console.log(line);
+            if (self.skipFirstLine && self.firstLine) {
                 self.firstLine = false;
             }
             else
@@ -38,7 +40,7 @@ export default class ParallelScrapper {
 
             // scrap all in parallel:
             parallelBatch(self.tickers,
-                self.parallelism,
+                self.parallelismDegree,
                 (tickers:Array<string>) => {
                     tickers.forEach( ticker => {
                         try {
