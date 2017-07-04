@@ -8,4 +8,8 @@ export default class Holding {
     firstBought: Date;
     country: string;
     YTD: number;
+
+    isNotEmpty():boolean {
+        return this.weight != null && this.shares != 0;
+    }
 }

@@ -8,8 +8,7 @@ import Persister from './persister';
 
 export default class MorningstarParser {
 
-    constructor(private persister: Persister) {        
-    }
+    constructor(private persister: Persister) {  }
 
     scrap(ticker: string) {
 
@@ -86,7 +85,7 @@ export default class MorningstarParser {
             const items = $("#holding_epage0 tr");
             items.each((i:number, element:any) => {
                 const $element = $(element);
-                const $header = $element.find("th a");
+                let $header = $element.find("th a");
                 const companyRef = $header.attr("href");
                 let companyTicker:string = "-";
                 if (companyRef) {
@@ -96,6 +95,7 @@ export default class MorningstarParser {
                         companyTicker = companyRef.substr(ixStart + 3, ixEnd - ixStart - 3);
                     }
                 } 
+                else $header = $element.find("th");
 
                 try
                 {
@@ -112,9 +112,12 @@ export default class MorningstarParser {
                     holding.firstBought = getCellDate($cells, 9);
                     holding.country = getCellText($cells, 11);
                     holding.YTD = getCellText($cells, 12);
-                    //console.log(holding);
-                    fund.holdings.push(holding);
-                    this.persister.persist(fund.ticker, holding);
+                    if (holding.isNotEmpty())
+                    {
+                        //console.log(holding);
+                        fund.holdings.push(holding);
+                        this.persister.persist(fund.ticker, holding);
+                    }
                 }
                 catch (parseErr) {
                     console.error(parseErr);
